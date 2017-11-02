@@ -1,7 +1,9 @@
+import {getTrust} from "./trusts.js"
+
 const Query = {
-  User: (_, data) => {
-    return {id: "foo"}
-  },
+  Trust: (_, data) => {
+    return getTrust(data.id);
+  } 
 };
 
 const resolvers = { Query };

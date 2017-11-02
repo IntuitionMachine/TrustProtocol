@@ -3,12 +3,14 @@ import { resolvers } from "../resolvers";
 
 // Define types
 const typeDefs = `
-  type User {
+  type Trust {
     id: ID! 
+    client: String!
+    name: String!
   }
 
   type Query {
-    User(id: ID): User
+    Trust(id: ID): Trust
   }
 `;
 
