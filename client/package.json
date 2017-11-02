@@ -3,9 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "apollo-client": "^1.9.1",
     "react": "^16.0.0",
+    "react-apollo": "^1.4.14",
     "react-dom": "^16.0.0",
-    "react-scripts-ts": "2.8.0"
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-scripts-ts": "2.8.0",
+    "recompose": "^0.26.0",
+    "redux": "^3.7.2",
+    "styled-components": "^2.2.1",
+    "web3": "^1.0.0-beta.24"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -14,6 +22,11 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/graphql": "^0.11.5",
+    "@types/lodash": "^4.14.77",
+    "@types/react-router": "^4.0.15",
+    "@types/react-router-dom": "^4.0.8",
+    "@types/recompose": "^0.24.2",
     "@types/jest": "^21.1.5",
     "@types/node": "^8.0.47",
     "@types/react": "^16.0.19",
