@@ -1,0 +1,28 @@
+{
+  "name": "trust-protocol-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "build:w": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/es6-promise": "0.0.33",
+    "@types/lodash": "^4.14.68",
+    "@types/pluralize": "0.0.27",
+    "es6-promise": "^4.1.1",
+    "ethereumjs-util": "^5.1.2",
+    "lodash": "^4.17.4",
+    "pluralize": "^6.0.0",
+    "web3": "^1.0.0-beta.24"
+  },
+  "devDependencies": {
+    "typescript": "^2.4.1"
+  }
+}

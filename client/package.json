@@ -14,7 +14,8 @@
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "styled-components": "^2.2.1",
-    "web3": "^1.0.0-beta.24"
+    "web3": "^1.0.0-beta.24",
+    "trust-protocol-js": "file:../trust_protocol_js"
   },
   "scripts": {
     "start": "react-scripts-ts start",

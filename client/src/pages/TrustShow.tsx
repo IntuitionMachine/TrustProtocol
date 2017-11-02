@@ -2,7 +2,9 @@ import * as React from "react";
 import { compose } from "recompose";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
+import {Marketplace} from "trust-protocol-js";
 
+console.log(Marketplace);
 const _TrustShow = (props: any) => {
     const _trusts = props.trusts.allTrusts;
     return (
