@@ -1,0 +1,10 @@
+{
+  "name": "trusttoken-demo-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {},
+  "dependencies": {
+    "truffle-hdwallet-provider": "0.0.3"
+  },
+  "scripts": {}
+}
