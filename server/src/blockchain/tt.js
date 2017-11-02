@@ -3,6 +3,7 @@ import _ from "lodash";
 const Web3 = require('web3');
 const _Trusts = require("../contracts/trusts.json");
 const _Marketplace = require("../contracts/marketplace.json");
+const _Requests = require("../contracts/requests.json");
 const ethUtil = require("ethereumjs-util");
 const secretKey = process.env.SECRET_KEY;
 const contractAddress = process.env.TRUST_CONTRACT_ADDRESS;
@@ -64,7 +65,35 @@ export class Trusts {
     async getAll(){
         const count = await this.getCount();
         return await Promise.all(
-            _.range(count).map(i => promisify(this.contract.methods.get(i).call))
+            _.range(count).map(i => this.get(i))
+        )
+    }
+}
+
+export class Requests {
+    constructor(location){
+        this.abi = _Requests;
+        this.location = location;
+        this.contract = new web3.eth.Contract(this.abi, this.location)
+    }
+
+    _format(r) {
+        return {client: web3.utils.hexToAscii(r[0]), description: web3.utils.hexToAscii(r[1]), state: r[2]} 
+    }
+
+    async get(params){
+        const item = await promisify(this.contract.methods.get(params).call);
+        return this._format(item);
+    }
+
+    async getCount(){
+        return await promisify(this.contract.methods.getCount().call);
+    }
+
+    async getAll(){
+        const count = await this.getCount();
+        return await Promise.all(
+            _.range(count).map(i => this.get(i))
         )
     }
 }
