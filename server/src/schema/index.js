@@ -11,6 +11,7 @@ const typeDefs = `
 
   type Query {
     Trust(id: ID): Trust
+    allTrusts: [Trust]
   }
 `;
 
