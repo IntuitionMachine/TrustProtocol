@@ -5,24 +5,20 @@ contract Trusts {
     struct Trust {
         address client;
         bytes32 name;
+        Requests requests;
     }
 
     Trust[] public items;
-    Requests public requests;
-
-    function Trusts() public {
-      requests = new Requests();
-    }
 
     function add(bytes32 name) public {
-        items.push(Trust(msg.sender, name));
+        items.push(Trust(msg.sender, name, new Requests()));
     }
     
     function getCount() public constant returns(uint) {
         return items.length;
     }
     
-    function get(uint index) public constant returns(address, bytes32) {
-        return (items[index].client, items[index].name) ;
+    function get(uint index) public constant returns(address, bytes32, address) {
+        return (items[index].client, items[index].name, items[index].requests) ;
     }
 }

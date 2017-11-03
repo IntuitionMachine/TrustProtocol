@@ -33,11 +33,11 @@ export class Marketplace {
     }
 
     async owner(){
-        return await promisify(this.contract.methods.owner().call);
+        return await promisify(this.contract.methods.owner().call, {});
     }
 
     async trusts(){
-        const address = await promisify(this.contract.methods.trusts().call);
+        const address = await promisify(this.contract.methods.trusts().call, {});
         return new Trusts(this.params, address);
     }
 }
@@ -60,12 +60,47 @@ export class Trusts {
     }
 
     async get(params:any){
-        const item = await promisify(this.contract.methods.get(params).call);
+        const item = await promisify(this.contract.methods.get(params).call, {});
         return this._format(item);
     }
 
     async getCount(){
-        return await promisify(this.contract.methods.getCount().call)
+        return await promisify(this.contract.methods.getCount().call, {})
+    }
+
+    async getAll(){
+        const count:any = await this.getCount();
+        console.log("GOT IT!", count)
+        return await Promise.all(
+            _.range(count).map(i => this.get(i))
+        )
+    }
+}
+
+export class Requests {
+    params: {web3: any, userId: any};
+    abi: any;
+    location: string;
+    contract: any;
+
+    constructor(params, location){
+        this.params = params;
+        this.abi = _Trusts["abi"];
+        this.location = location;
+        this.contract = new this.params.web3.eth.Contract(this.abi, this.location)
+    }
+
+    _format(trust:any) {
+        return {client: trust[0], name: this.params.web3.utils.hexToAscii(trust[1])} 
+    }
+
+    async get(params:any){
+        const item = await promisify(this.contract.methods.get(params).call, {});
+        return this._format(item);
+    }
+
+    async getCount(){
+        return await promisify(this.contract.methods.getCount().call, {})
     }
 
     async getAll(){

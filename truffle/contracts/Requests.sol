@@ -18,7 +18,7 @@ contract Requests {
     function add(bytes32 title, bytes32 description) public {
         items.push(Request(title, description, States.Requested));
     }
-    
+
     function getCount() public constant returns(uint) {
         return items.length;
     }
