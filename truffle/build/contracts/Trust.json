@@ -1,0 +1,21 @@
+{
+  "contract_name": "Trust",
+  "abi": [],
+  "unlinked_binary": "0x60606040523415600e57600080fd5b5b603680601c6000396000f30060606040525b600080fd00a165627a7a723058207d6c885eb44fa16a22939ac75e6505511a25919d812050a9ad9705940653c32c0029",
+  "networks": {
+    "3": {
+      "events": {},
+      "links": {},
+      "address": "0x9677f948237e9fcf85d021e43806335763977086",
+      "updated_at": 1509750216980
+    },
+    "1509748114543": {
+      "events": {},
+      "links": {},
+      "address": "0x83e121949e1389cd95e02a91ddfdb0f8f21dac13",
+      "updated_at": 1509750012372
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1509750216980
+}
