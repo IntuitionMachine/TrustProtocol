@@ -44,9 +44,9 @@ var _ = require("lodash");
 // import * as Promise from "es6-promise";
 // const provider = new Web3.providers.HttpProvider("https://ropsten.infura.io:dYWKKqsJkbv9cZlQFEpI")
 // const web3 = new Web3(provider)
-var promisify = function (inner) {
+var promisify = function (inner, args) {
     return new Promise(function (resolve, reject) {
-        return inner(function (err, res) {
+        return inner(args, function (err, res) {
             if (err) {
                 reject(err);
             }
@@ -55,11 +55,11 @@ var promisify = function (inner) {
     });
 };
 var Marketplace = (function () {
-    function Marketplace(web3) {
-        this.web3 = web3;
+    function Marketplace(params) {
+        this.params = params;
         this.abi = _Marketplace["abi"];
         this.location = "0xfa4f59b6c6a68ee59128bd5ae974fdbb080ad5c0";
-        this.contract = new this.web3.eth.Contract(this.abi, this.location);
+        this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
         return this;
     }
     Marketplace.prototype.owner = function () {
@@ -80,7 +80,7 @@ var Marketplace = (function () {
                     case 0: return [4 /*yield*/, promisify(this.contract.methods.trusts().call)];
                     case 1:
                         address = _a.sent();
-                        return [2 /*return*/, new Trusts(this.web3, address)];
+                        return [2 /*return*/, new Trusts(this.params, address)];
                 }
             });
         });
@@ -89,14 +89,14 @@ var Marketplace = (function () {
 }());
 exports.Marketplace = Marketplace;
 var Trusts = (function () {
-    function Trusts(web3, location) {
-        this.web3 = web3;
+    function Trusts(params, location) {
+        this.params = params;
         this.abi = _Trusts["abi"];
         this.location = location;
-        this.contract = new this.web3.eth.Contract(this.abi, this.location);
+        this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
     }
     Trusts.prototype._format = function (trust) {
-        return { client: trust[0], name: this.web3.utils.hexToAscii(trust[1]) };
+        return { client: trust[0], name: this.params.web3.utils.hexToAscii(trust[1]) };
     };
     Trusts.prototype.get = function (params) {
         return __awaiter(this, void 0, void 0, function () {
@@ -116,6 +116,16 @@ var Trusts = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, promisify(this.contract.methods.getCount().call)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Trusts.prototype.create = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.contract.methods.add(this.params.web3.utils.toHex(name)).send, { from: this.params.userId })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

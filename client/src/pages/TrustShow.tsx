@@ -2,45 +2,39 @@ import * as React from "react";
 import { compose } from "recompose";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
-import {Marketplace} from "trust-protocol-js";
-import getWeb3 from "../utils/getWeb3";
-
-async function foo(web3){
-    const mm = new Marketplace(web3);
-    setTimeout(() => {
-        console.log("hi");
-        console.log(mm.owner)
-        mm.owner().then(e => {console.log(e)})
-    }, 1000)
-    
-}
-
-getWeb3
-.then( web3 => {
-    foo(web3.web3)
-})
 
 const _TrustShow = (props: any) => {
-    const _trusts = props.trusts.allTrusts;
     return (
         <div>
-            hi there
-            {_trusts && _trusts.map((r: any, i: any) => (
-                <div key={i}>{r.name} {r.client}</div>
-            ))}
+            {props.trust.Trust &&
+                <div>
+                    {props.trust.Trust.name}
+                    {props.trust.Trust.client}
+                </div>
+            }
         </div>
     )
 }
 
 const TRUSTS_QUERY = gql`
-query{
-  allTrusts{
-    name
-    client
-  }
-}
+    query Trust($id: ID!){
+    Trust(id: $id){
+        name
+        client
+    }
+    }
 `;
 
 export const TrustShow = compose(
-    graphql(TRUSTS_QUERY, { name: "trusts" }),
+  (Component) => (props) => {
+    const EnhancedComponent = graphql(TRUSTS_QUERY, {
+      name: "trust",
+      options: {
+        variables: {
+          id: props.match.params.id,
+        },
+      },
+    })(Component);
+    return <EnhancedComponent {...props} />;
+  },
 )(_TrustShow)

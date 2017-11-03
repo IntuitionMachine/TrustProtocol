@@ -3,6 +3,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import ApolloClient, { createNetworkInterface } from "apollo-client";
 import { ApolloProvider } from "react-apollo";
 import { createStore, combineReducers } from "redux";
+import {TrustIndex} from "./pages/TrustIndex";
 import {TrustShow} from "./pages/TrustShow";
 import getWeb3 from "./utils/getWeb3";
 
@@ -22,15 +23,12 @@ const store = createStore(
   reduxDevtoolsMiddleware
 );
 
+//todo: This allProps use is a hack instead of typing <TrustShow {...props} web3={web3}/>.
+//Fix to work with typescript.
 const Routes = ({web3}) => (
   <div>
-    <Route exact={true} path="/" render={props => {
-      const allProps = {web3, ...props}
-      //todo: This allProps use is a hack instead of typing <TrustShow {...Props} web3={web3}/>.
-      //Fix to work with typescript.
-      return (<TrustShow {...allProps} />)
-      }
-    } />
+    <Route path="/trusts/:id" render={props => (<TrustShow {...{web3, ...props}} />)}/>
+    <Route exact={true} path="/" render={props => (<TrustIndex {...{web3, ...props}} />)}/>
   </div>
 );
 
@@ -42,15 +40,21 @@ class App extends React.Component<any, any> {
     }
   }
   componentWillMount(){
-    getWeb3.then(results => {
-      this.setState({web3: results.web3})
-      const marketplace = new Marketplace(results.web3)
-      marketplace.trusts()
-      .then(t => {
-        return t.getAll()
-      })
-      .then(b => {
-        console.log('bbb', b)
+    getWeb3.then(({web3}) => {
+      this.setState({web3})
+      web3.eth.getAccounts((e, accounts) => {
+        console.log("hi", accounts[0])
+        const marketplace = new Marketplace({web3, userId: accounts[0]})
+        let _trusts;
+        marketplace.trusts()
+        .then(t => {
+          _trusts = t
+          return t.getAll()
+        })
+        .then(b => {
+          // _trusts.create("foobarrr")
+          console.log('bbb', b)
+        })
       })
     })
   }

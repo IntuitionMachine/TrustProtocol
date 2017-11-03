@@ -1,18 +1,24 @@
 export declare class Marketplace {
-    web3: any;
+    params: {
+        web3: any;
+        userId: any;
+    };
     abi: any;
     location: string;
     contract: any;
-    constructor(web3: any);
-    owner(): Promise<{}>;
+    constructor(params: any);
+    owner(): Promise<any>;
     trusts(): Promise<Trusts>;
 }
 export declare class Trusts {
-    web3: any;
+    params: {
+        web3: any;
+        userId: any;
+    };
     abi: any;
     location: string;
     contract: any;
-    constructor(web3: any, location: any);
+    constructor(params: any, location: any);
     _format(trust: any): {
         client: any;
         name: any;
@@ -21,7 +27,8 @@ export declare class Trusts {
         client: any;
         name: any;
     }>;
-    getCount(): Promise<{}>;
+    getCount(): Promise<any>;
+    create(name: any): Promise<{}>;
     getAll(): Promise<{
         client: any;
         name: any;
