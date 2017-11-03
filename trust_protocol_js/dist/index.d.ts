@@ -28,7 +28,6 @@ export declare class Trusts {
         name: any;
     }>;
     getCount(): Promise<any>;
-    create(name: any): Promise<{}>;
     getAll(): Promise<{
         client: any;
         name: any;

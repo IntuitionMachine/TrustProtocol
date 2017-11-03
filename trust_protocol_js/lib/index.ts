@@ -65,11 +65,7 @@ export class Trusts {
     }
 
     async getCount(){
-        return await promisify(this.contract.methods.getCount().call);
-    }
-
-    async create(name){
-        return await promisify(this.contract.methods.add(this.params.web3.utils.toHex(name)).send, {from: this.params.userId});
+        return await promisify(this.contract.methods.getCount().call)
     }
 
     async getAll(){

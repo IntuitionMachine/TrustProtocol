@@ -25,10 +25,10 @@ const store = createStore(
 
 //todo: This allProps use is a hack instead of typing <TrustShow {...props} web3={web3}/>.
 //Fix to work with typescript.
-const Routes = ({web3}) => (
+const Routes = ({web3Params}) => (
   <div>
-    <Route path="/trusts/:id" render={props => (<TrustShow {...{web3, ...props}} />)}/>
-    <Route exact={true} path="/" render={props => (<TrustIndex {...{web3, ...props}} />)}/>
+    <Route path="/trusts/:id" render={props => (<TrustShow {...{web3Params, ...props}} />)}/>
+    <Route exact={true} path="/" render={props => (<TrustIndex {...{web3Params, ...props}} />)}/>
   </div>
 );
 
@@ -36,25 +36,14 @@ class App extends React.Component<any, any> {
   constructor(props){
     super(props)
     this.state = {
-      web3: null
+      web3Params: {web3: null, user: null}
     }
   }
   componentWillMount(){
     getWeb3.then(({web3}) => {
       this.setState({web3})
       web3.eth.getAccounts((e, accounts) => {
-        console.log("hi", accounts[0])
-        const marketplace = new Marketplace({web3, userId: accounts[0]})
-        let _trusts;
-        marketplace.trusts()
-        .then(t => {
-          _trusts = t
-          return t.getAll()
-        })
-        .then(b => {
-          // _trusts.create("foobarrr")
-          console.log('bbb', b)
-        })
+        this.setState({web3Params: {web3, user: accounts[0]}})
       })
     })
   }
@@ -62,7 +51,7 @@ class App extends React.Component<any, any> {
     return (
       <ApolloProvider store={store} client={client}>
         <BrowserRouter>
-          <Routes web3={this.state.web3}/>
+          <Routes web3Params={this.state.web3Params}/>
         </BrowserRouter>
       </ApolloProvider>
     );

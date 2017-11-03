@@ -121,16 +121,6 @@ var Trusts = (function () {
             });
         });
     };
-    Trusts.prototype.create = function (name) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.contract.methods.add(this.params.web3.utils.toHex(name)).send, { from: this.params.userId })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
     Trusts.prototype.getAll = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
