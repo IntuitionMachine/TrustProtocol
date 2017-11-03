@@ -3,8 +3,23 @@ import { compose } from "recompose";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import {Marketplace} from "trust-protocol-js";
+import getWeb3 from "../utils/getWeb3";
 
-console.log(Marketplace);
+async function foo(web3){
+    const mm = new Marketplace(web3);
+    setTimeout(() => {
+        console.log("hi");
+        console.log(mm.owner)
+        mm.owner().then(e => {console.log(e)})
+    }, 1000)
+    
+}
+
+getWeb3
+.then( web3 => {
+    foo(web3.web3)
+})
+
 const _TrustShow = (props: any) => {
     const _trusts = props.trusts.allTrusts;
     return (

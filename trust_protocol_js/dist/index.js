@@ -35,16 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var web3_1 = require("web3");
+// import Web3 from 'web3';
 var _Marketplace = require("./contracts/Marketplace.json");
-exports.foo = _Marketplace["abi"];
-console.log("HERE", exports.foo);
-// import _Trusts from "../contracts/Trusts.json";
+var _Trusts = require("./contracts/Trusts.json");
+var _ = require("lodash");
 // import _Requests from "../contracts/Requests.json";
 // import ethUtil from "ethereumjs-util";
 // import * as Promise from "es6-promise";
-var provider = new web3_1.default.providers.HttpProvider("https://ropsten.infura.io:dYWKKqsJkbv9cZlQFEpI");
-var web3 = new web3_1.default(provider);
+// const provider = new Web3.providers.HttpProvider("https://ropsten.infura.io:dYWKKqsJkbv9cZlQFEpI")
+// const web3 = new Web3(provider)
 var promisify = function (inner) {
     return new Promise(function (resolve, reject) {
         return inner(function (err, res) {
@@ -56,10 +55,12 @@ var promisify = function (inner) {
     });
 };
 var Marketplace = (function () {
-    function Marketplace() {
+    function Marketplace(web3) {
+        this.web3 = web3;
         this.abi = _Marketplace["abi"];
         this.location = "0xfa4f59b6c6a68ee59128bd5ae974fdbb080ad5c0";
-        this.contract = new web3.eth.Contract(this.abi, this.location);
+        this.contract = new this.web3.eth.Contract(this.abi, this.location);
+        return this;
     }
     Marketplace.prototype.owner = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -79,7 +80,7 @@ var Marketplace = (function () {
                     case 0: return [4 /*yield*/, promisify(this.contract.methods.trusts().call)];
                     case 1:
                         address = _a.sent();
-                        return [2 /*return*/];
+                        return [2 /*return*/, new Trusts(this.web3, address)];
                 }
             });
         });
@@ -87,26 +88,55 @@ var Marketplace = (function () {
     return Marketplace;
 }());
 exports.Marketplace = Marketplace;
-// export class Trusts {
-//     constructor(location){
-//         this.abi = _Trusts["abi"];
-//         this.location = location;
-//         this.contract = new web3.eth.Contract(this.abi, this.location)
-//     }
-//     _format(trust) {
-//         return {client: trust[0], name: web3.utils.hexToAscii(trust[1])} 
-//     }
-//     async get(params){
-//         const item = await promisify(this.contract.methods.get(params).call);
-//         return this._format(item);
-//     }
-//     async getCount(){
-//         return await promisify(this.contract.methods.getCount().call);
-//     }
-//     async getAll(){
-//         const count = await this.getCount();
-//         return await Promise.all(
-//             _.range(count).map(i => this.get(i))
-//         )
-//     }
-// } 
+var Trusts = (function () {
+    function Trusts(web3, location) {
+        this.web3 = web3;
+        this.abi = _Trusts["abi"];
+        this.location = location;
+        this.contract = new this.web3.eth.Contract(this.abi, this.location);
+    }
+    Trusts.prototype._format = function (trust) {
+        return { client: trust[0], name: this.web3.utils.hexToAscii(trust[1]) };
+    };
+    Trusts.prototype.get = function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            var item;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.contract.methods.get(params).call)];
+                    case 1:
+                        item = _a.sent();
+                        return [2 /*return*/, this._format(item)];
+                }
+            });
+        });
+    };
+    Trusts.prototype.getCount = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.contract.methods.getCount().call)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Trusts.prototype.getAll = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var count;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getCount()];
+                    case 1:
+                        count = _a.sent();
+                        console.log("GOT IT!", count);
+                        return [4 /*yield*/, Promise.all(_.range(count).map(function (i) { return _this.get(i); }))];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    return Trusts;
+}());
+exports.Trusts = Trusts;

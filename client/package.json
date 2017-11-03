@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "apollo-client": "^1.9.1",
+    "bignumber.js": "^4.1.0",
     "graphql-tag": "^2.5.0",
     "react": "^16.0.0",
     "react-apollo": "^1.4.14",
@@ -14,8 +15,8 @@
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "styled-components": "^2.2.1",
-    "web3": "^1.0.0-beta.24",
-    "trust-protocol-js": "file:../trust_protocol_js"
+    "trust-protocol-js": "file:../trust_protocol_js",
+    "web3": "^1.0.0-beta.24"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -25,13 +26,15 @@
   },
   "devDependencies": {
     "@types/graphql": "^0.11.5",
+    "@types/jest": "^21.1.5",
     "@types/lodash": "^4.14.77",
+    "@types/node": "^8.0.47",
+    "@types/react": "^16.0.19",
+    "@types/react-dom": "^16.0.2",
     "@types/react-router": "^4.0.15",
     "@types/react-router-dom": "^4.0.8",
     "@types/recompose": "^0.24.2",
-    "@types/jest": "^21.1.5",
-    "@types/node": "^8.0.47",
-    "@types/react": "^16.0.19",
-    "@types/react-dom": "^16.0.2"
+    "@types/underscore": "^1.8.4",
+    "types-bn": "0.0.1"
   }
 }
