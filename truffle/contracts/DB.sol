@@ -33,6 +33,10 @@ contract DB is IDB {
         return requests.length;
     }
 
+    function getRequest(uint _i) public returns(uint, bytes32, bytes32, Request.States) {
+        return requests[_i].get();
+    }
+
     function changeRequestState(uint index, Request.States state) private {
         var request = requests[index];
         request.updateState(state);

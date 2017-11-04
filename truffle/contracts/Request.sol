@@ -35,8 +35,12 @@ library Request {
         return _client;
     }
     
-    function trustee(Data storage self) public returns(address){
+    function trustee(Data storage self) public returns(address) {
         var (,_trustee,) = self.db.getTrust(self.trustId);
         return _trustee;
+    }
+
+    function get(Data storage self) public returns(uint, bytes32, bytes32, States) {
+        return (self.trustId, self.title, self.description, self.state);
     }
 }
