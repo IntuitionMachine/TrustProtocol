@@ -36,14 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // import Web3 from 'web3';
-var _Marketplace = require("./contracts/Marketplace.json");
-var _Trusts = require("./contracts/Trusts.json");
+var _DB = require("./contracts/DB.json");
 var _ = require("lodash");
-// import _Requests from "../contracts/Requests.json";
-// import ethUtil from "ethereumjs-util";
-// import * as Promise from "es6-promise";
-// const provider = new Web3.providers.HttpProvider("https://ropsten.infura.io:dYWKKqsJkbv9cZlQFEpI")
-// const web3 = new Web3(provider)
 var promisify = function (inner, args) {
     return new Promise(function (resolve, reject) {
         return inner(args, function (err, res) {
@@ -54,69 +48,36 @@ var promisify = function (inner, args) {
         });
     });
 };
-var Marketplace = (function () {
-    function Marketplace(params) {
-        this.params = params;
-        this.abi = _Marketplace["abi"];
-        this.location = "0xfa4f59b6c6a68ee59128bd5ae974fdbb080ad5c0";
-        this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
-        return this;
-    }
-    Marketplace.prototype.owner = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.contract.methods.owner().call)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    Marketplace.prototype.trusts = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var address;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.contract.methods.trusts().call)];
-                    case 1:
-                        address = _a.sent();
-                        return [2 /*return*/, new Trusts(this.params, address)];
-                }
-            });
-        });
-    };
-    return Marketplace;
-}());
-exports.Marketplace = Marketplace;
-var Trusts = (function () {
-    function Trusts(params, location) {
-        this.params = params;
-        this.abi = _Trusts["abi"];
-        this.location = location;
-        this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
+var Trusts = /** @class */ (function () {
+    function Trusts(params) {
+        this.Db = Db;
     }
     Trusts.prototype._format = function (trust) {
-        return { client: trust[0], name: this.params.web3.utils.hexToAscii(trust[1]) };
-    };
-    Trusts.prototype.get = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            var item;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.contract.methods.get(params).call)];
-                    case 1:
-                        item = _a.sent();
-                        return [2 /*return*/, this._format(item)];
-                }
-            });
-        });
+        return {
+            client: trust[0],
+            trustee: trust[1],
+            name: this.Db.params.web3.utils.hexToAscii(trust[2])
+        };
     };
     Trusts.prototype.getCount = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.contract.methods.getCount().call)];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getTrustCount().call, {})];
                     case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Trusts.prototype.get = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var trust;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getTrust(id).call, {})];
+                    case 1:
+                        trust = _a.sent();
+                        return [2 /*return*/, this._format(trust)];
                 }
             });
         });
@@ -130,9 +91,18 @@ var Trusts = (function () {
                     case 0: return [4 /*yield*/, this.getCount()];
                     case 1:
                         count = _a.sent();
-                        console.log("GOT IT!", count);
                         return [4 /*yield*/, Promise.all(_.range(count).map(function (i) { return _this.get(i); }))];
                     case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Trusts.prototype.create = function (client, trustee, name) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.addTrust(client, trustee, name).send, { from: this.Db.params.userId })];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -140,3 +110,99 @@ var Trusts = (function () {
     return Trusts;
 }());
 exports.Trusts = Trusts;
+var Requests = /** @class */ (function () {
+    function Requests(params) {
+        this.Db = Db;
+    }
+    Requests.prototype._format = function (_request) {
+        return {
+            trustId: _request[0],
+            title: this.Db.params.web3.utils.hexToAscii(_request[1]),
+            description: this.Db.params.web3.utils.hexToAscii(_request[2]),
+            state: _request[3],
+        };
+    };
+    Requests.prototype.get = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _request;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getRequest(id).call, {})];
+                    case 1:
+                        _request = _a.sent();
+                        return [2 /*return*/, this._format(_request)];
+                }
+            });
+        });
+    };
+    Requests.prototype.getCount = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getRequestCount().call, {})];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Requests.prototype.getAll = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var count;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getCount()];
+                    case 1:
+                        count = _a.sent();
+                        return [4 /*yield*/, Promise.all(_.range(count).map(function (i) { return _this.Db.getTrust(i); }))];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Requests.prototype.create = function (trustId, title, description) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.addRequest(trustId, title, description).send, { from: this.Db.params.userId })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Requests.prototype.accept = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.acceptRequest().send, { from: this.Db.params.userId })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Requests.prototype.deliver = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.deliverRequest().send, { from: this.Db.params.userId })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    return Requests;
+}());
+exports.Requests = Requests;
+var Db = /** @class */ (function () {
+    function Db(params) {
+        this.params = params;
+        this.abi = _DB["abi"];
+        this.location = "0xfa4f59b6c6a68ee59128bd5ae974fdbb080ad5c0";
+        this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
+        this.trusts = new Trusts(this);
+        this.requests = new Requests(this);
+        return this;
+    }
+    return Db;
+}());
+exports.Db = Db;
