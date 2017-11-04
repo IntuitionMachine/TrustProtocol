@@ -7,6 +7,6 @@
     "truffle-hdwallet-provider": "0.0.3"
   },
   "scripts": {
-    "compile": "truffle compile; cp -r ./build/contracts ../trust_protocol_js/lib/"
+    "compile": "truffle compile; cp -r ./build/contracts ../trust_protocol_js/lib/; cp -r ./build/contracts ../trust_protocol_js/dist/"
   }
 }
