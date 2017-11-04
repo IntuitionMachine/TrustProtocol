@@ -6,12 +6,23 @@ const typeDefs = `
   type Trust {
     id: ID! 
     client: String!
+    trustee: String!
     name: String!
+  }
+
+  type Request {
+    id: ID! 
+    trustId: ID! 
+    title: String!
+    description: String!
+    state: String!
   }
 
   type Query {
     Trust(id: ID): Trust
     allTrusts: [Trust]
+    Request(id: ID): Request
+    allRequests: [Request]
   }
 `;
 

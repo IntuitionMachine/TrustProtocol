@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "babel-node app.js",
+    "start:w": "babel-node app.js --watch",
     "production:start": "node ./dist/app.js",
     "inspect": "babel-node app.js --inspect-brk",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
@@ -35,6 +36,7 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "morgan": "~1.9.0",
+    "trust-protocol-js": "file:../trust_protocol_js",
     "web3": "^1.0.0-beta.24"
   },
   "engines": {

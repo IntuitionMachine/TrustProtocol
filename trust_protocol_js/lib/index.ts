@@ -2,6 +2,250 @@
 import * as _DB from "./contracts/DB.json";
 import * as _ from "lodash";
 
+const bar = [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "client",
+          "type": "address"
+        },
+        {
+          "name": "trustee",
+          "type": "address"
+        },
+        {
+          "name": "name",
+          "type": "bytes32"
+        }
+      ],
+      "name": "addTrust",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "deliverRequest",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getRequestCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "acceptRequest",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "trustIndex",
+          "type": "uint256"
+        },
+        {
+          "name": "title",
+          "type": "bytes32"
+        },
+        {
+          "name": "description",
+          "type": "bytes32"
+        }
+      ],
+      "name": "addRequest",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "trusts",
+      "outputs": [
+        {
+          "name": "client",
+          "type": "address"
+        },
+        {
+          "name": "trustee",
+          "type": "address"
+        },
+        {
+          "name": "name",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "requests",
+      "outputs": [
+        {
+          "name": "trustId",
+          "type": "uint256"
+        },
+        {
+          "name": "title",
+          "type": "bytes32"
+        },
+        {
+          "name": "description",
+          "type": "bytes32"
+        },
+        {
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "name": "db",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_i",
+          "type": "uint256"
+        }
+      ],
+      "name": "getRequest",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "getTrust",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getTrustCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ]
+
+export class TrustProtocolJs {
+    params: {web3: any, userId: any};
+    abi: any;
+    location: string;
+    contract: any;
+    trusts: any;
+    requests: any;
+
+    constructor(params){
+        this.params = params;
+        this.abi = _DB["abi"];
+        console.log(this.abi)
+        this.location = "0xbbbdad4b8cecbe90aed7c30e17796f23c95fc6d8";
+        this.contract = new this.params.web3.eth.Contract(bar, this.location)
+        debugger;
+        this.trusts = new Trusts(this);
+        this.requests = new Requests(this);
+        return this;
+    }
+}
+
 const promisify = (inner: any, args: any) =>
   new Promise((resolve:any, reject:any) =>
     inner(args, (err:any, res:any) => {
@@ -13,8 +257,8 @@ const promisify = (inner: any, args: any) =>
 export class Trusts {
     Db: any;
 
-    constructor(params){
-        this.Db = Db;
+    constructor(db){
+        this.Db = db;
     }
 
     _format(trust:any) {
@@ -26,7 +270,10 @@ export class Trusts {
     }
 
     async getCount(){
-        return await promisify(this.Db.contract.methods.getTrustCount().call, {});
+        debugger;
+        const count = await promisify(this.Db.contract.methods.getTrustCount().call, {});
+        console.log("HI", count);
+        return count
     }
 
     async get(id){
@@ -49,8 +296,8 @@ export class Trusts {
 export class Requests {
     Db: any;
 
-    constructor(params){
-        this.Db = Db;
+    constructor(db){
+        this.Db = db;
     }
 
     _format(_request:any) {
@@ -88,24 +335,5 @@ export class Requests {
 
     async deliver(){
         return await promisify(this.Db.contract.methods.deliverRequest().send, {from: this.Db.params.userId});
-    }
-}
-
-export class Db {
-    params: {web3: any, userId: any};
-    abi: any;
-    location: string;
-    contract: any;
-    trusts: any;
-    requests: any;
-
-    constructor(params){
-        this.params = params;
-        this.abi = _DB["abi"];
-        this.location = "0xfa4f59b6c6a68ee59128bd5ae974fdbb080ad5c0";
-        this.contract = new this.params.web3.eth.Contract(this.abi, this.location)
-        this.trusts = new Trusts(this);
-        this.requests = new Requests(this);
-        return this;
     }
 }

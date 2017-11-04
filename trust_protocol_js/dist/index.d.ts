@@ -1,6 +1,18 @@
+export declare class TrustProtocolJs {
+    params: {
+        web3: any;
+        userId: any;
+    };
+    abi: any;
+    location: string;
+    contract: any;
+    trusts: any;
+    requests: any;
+    constructor(params: any);
+}
 export declare class Trusts {
     Db: any;
-    constructor(params: any);
+    constructor(db: any);
     _format(trust: any): {
         client: any;
         trustee: any;
@@ -21,7 +33,7 @@ export declare class Trusts {
 }
 export declare class Requests {
     Db: any;
-    constructor(params: any);
+    constructor(db: any);
     _format(_request: any): {
         trustId: any;
         title: any;
@@ -39,16 +51,4 @@ export declare class Requests {
     create(trustId: any, title: any, description: any): Promise<{}>;
     accept(): Promise<{}>;
     deliver(): Promise<{}>;
-}
-export declare class Db {
-    params: {
-        web3: any;
-        userId: any;
-    };
-    abi: any;
-    location: string;
-    contract: any;
-    trusts: any;
-    requests: any;
-    constructor(params: any);
 }
