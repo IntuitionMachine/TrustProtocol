@@ -2,19 +2,27 @@ import * as React from "react";
 import { compose } from "recompose";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
-import {Marketplace} from "trust-protocol-js";
+import { TrustProtocolJs } from "trust-protocol-js"
+import { Row, Column, FormGroup, ControlLabel, FormControl, Button } from "react-bootstrap";
+
+const FieldGroup: any = ({ id, label, help, ...props }) => (
+    <FormGroup controlId={id}>
+        <ControlLabel>{label}</ControlLabel>
+        <FormControl {...props} />
+    </FormGroup>
+);
 
 class _TrustShow extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.createRequest = this.createRequest.bind(this);
     }
-    async createRequest(){
-      console.log("HI", this.props.web3Params);
-      const m = new Marketplace(this.props.web3Params);
-      const trusts = await m.trusts()
-      const list = await trusts.getAll()
-      console.log('YO', list);
+    async createRequest() {
+        const trustProtocol = new TrustProtocolJs(this.props.web3Params);
+        const form: any = this.refs.form;
+        const title = form.getElementsByTagName("input")[0].value;
+        const description = form.getElementsByTagName("input")[1].value;
+        const request = await trustProtocol.requests.create(this.props.match.params.id, title, description);
     }
     public render() {
         return (
@@ -25,8 +33,22 @@ class _TrustShow extends React.Component<any, any> {
                         {this.props.trust.Trust.client}
                     </div>
                 }
-                <div onClick={this.createRequest}>
-                    hiii
+                <div ref="form">
+                    <FieldGroup
+                        id="formControlsText"
+                        type="text"
+                        label="Title"
+                        placeholder="Enter text"
+                    />
+                    <FieldGroup
+                        id="trustee"
+                        type="text"
+                        label="Description"
+                        placeholder="Enter text"
+                    />
+                    <Button type="submit" onClick={this.createRequest} >
+                        Submit
+                    </Button>
                 </div>
             </div>
         )
@@ -38,6 +60,7 @@ const TRUSTS_QUERY = gql`
     Trust(id: $id){
         name
         client
+        trustee
     }
     }
 `;

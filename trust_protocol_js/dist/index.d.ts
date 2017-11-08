@@ -29,7 +29,7 @@ export declare class Trusts {
         trustee: any;
         name: any;
     }[]>;
-    create(client: any, trustee: any, name: any): Promise<{}>;
+    create(client: any, trustee: any, name: any): Promise<void>;
 }
 export declare class Requests {
     Db: any;
@@ -47,7 +47,12 @@ export declare class Requests {
         state: any;
     }>;
     getCount(): Promise<{}>;
-    getAll(id: any): Promise<any[]>;
+    getAll(id: any): Promise<{
+        trustId: any;
+        title: any;
+        description: any;
+        state: any;
+    }[]>;
     create(trustId: any, title: any, description: any): Promise<{}>;
     accept(): Promise<{}>;
     deliver(): Promise<{}>;

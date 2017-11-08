@@ -7,8 +7,6 @@ import {TrustIndex} from "./pages/TrustIndex";
 import {TrustShow} from "./pages/TrustShow";
 import getWeb3 from "./utils/getWeb3";
 
-import {Marketplace} from "trust-protocol-js";
-
 const networkInterface = createNetworkInterface({ uri: process.env.REACT_APP_SERVER_URL });
 const reduxDevtoolsMiddleware =
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__();
@@ -43,7 +41,7 @@ class App extends React.Component<any, any> {
     getWeb3.then(({web3}) => {
       this.setState({web3})
       web3.eth.getAccounts((e, accounts) => {
-        this.setState({web3Params: {web3, user: accounts[0]}})
+        this.setState({web3Params: {web3, userId: accounts[0]}})
       })
     })
   }

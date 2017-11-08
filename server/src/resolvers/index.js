@@ -4,7 +4,7 @@ import {trustProtocol} from "../utils/trustProtocol.js"
 
 const Query = {
   Trust: async (_, data) => {
-    const count = await trustProtocol.trusts.get(data.id);
+    const trust = await trustProtocol.trusts.get(data.id);
     return {id:data.id, ...trust};
   },
 
