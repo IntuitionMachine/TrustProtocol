@@ -1,5 +1,5 @@
 # TrustProtocol
-The TrustProtocol system incorporates several projects to allow people to interact with smart contracts in order to manage smart trusts.
+The TrustProtocol system incorporates several projects to allow people to interact with smart contracts in order to manage smart trusts. As these get larger, they may be broken up into separate repos.
 
 ## Truffle
 The truffle directory contains a truffle project with all relevant ethereum contracts and deployment scripts.
