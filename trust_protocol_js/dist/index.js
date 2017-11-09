@@ -77,12 +77,9 @@ var Trusts = /** @class */ (function () {
             var count;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        debugger;
-                        return [4 /*yield*/, promisify(this.Db.contract.methods.getTrustCount().call, {})];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getTrustCount().call, {})];
                     case 1:
                         count = _a.sent();
-                        console.log("HI", count);
                         return [2 /*return*/, count];
                 }
             });
@@ -138,7 +135,12 @@ var Requests = /** @class */ (function () {
             trustId: _request[0],
             title: this.Db.params.web3.utils.hexToAscii(_request[1]),
             description: this.Db.params.web3.utils.hexToAscii(_request[2]),
-            state: _request[3],
+            state: {
+                "0": "REQUESTED",
+                "1": "ACCEPTED",
+                "2": "DELIVERED",
+                "3": "REJECTED"
+            }[_request[3]],
         };
     };
     Requests.prototype.get = function (id) {

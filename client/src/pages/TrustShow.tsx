@@ -25,6 +25,7 @@ class _TrustShow extends React.Component<any, any> {
         const request = await trustProtocol.requests.create(this.props.match.params.id, title, description);
     }
     public render() {
+        console.log(this.props.trust.Trust)
         return (
             <div>
                 {this.props.trust.Trust &&
@@ -61,6 +62,11 @@ const TRUSTS_QUERY = gql`
         name
         client
         trustee
+        requests{
+          title
+          description
+          state
+        }
     }
     }
 `;

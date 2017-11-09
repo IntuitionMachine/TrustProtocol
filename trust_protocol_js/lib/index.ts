@@ -45,9 +45,7 @@ export class Trusts {
     }
 
     async getCount(){
-        debugger;
         const count = await promisify(this.Db.contract.methods.getTrustCount().call, {});
-        console.log("HI", count);
         return count
     }
 
@@ -81,7 +79,12 @@ export class Requests {
             trustId: _request[0],
             title: this.Db.params.web3.utils.hexToAscii(_request[1]),
             description: this.Db.params.web3.utils.hexToAscii(_request[2]),
-            state: _request[3],
+            state: {
+                "0": "REQUESTED",
+                "1": "ACCEPTED",
+                "2": "DELIVERED",
+                "3": "REJECTED"
+            }[_request[3]],
         } 
     }
 
