@@ -4,6 +4,7 @@ import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import { TrustProtocolJs } from "trust-protocol-js"
 import { Row, Column, FormGroup, ControlLabel, FormControl, Button } from "react-bootstrap";
+import styled from "styled-components"
 
 const FieldGroup: any = ({ id, label, help, ...props }) => (
     <FormGroup controlId={id}>
@@ -11,6 +12,12 @@ const FieldGroup: any = ({ id, label, help, ...props }) => (
         <FormControl {...props} />
     </FormGroup>
 );
+
+const Request = styled.div`
+  background: #ddd;
+  padding: .5em 1em 1em 1em;
+  margin-bottom: 1em;
+`
 
 class _TrustShow extends React.Component<any, any> {
     constructor(props) {
@@ -30,8 +37,19 @@ class _TrustShow extends React.Component<any, any> {
             <div>
                 {this.props.trust.Trust &&
                     <div>
-                        {this.props.trust.Trust.name}
-                        {this.props.trust.Trust.client}
+                        <h2>{this.props.trust.Trust.name}</h2>
+                        <strong>{`client: ${this.props.trust.Trust.client}`}</strong>
+                        <br/>
+                        <strong>{`fiduciary: ${this.props.trust.Trust.trustee}`}</strong>
+                        <h3>Requests </h3>
+                        {this.props.trust.Trust.requests.map(request =>
+                            <Request>
+                                <h3>{request.title}</h3>
+                                <p>{request.description}</p>
+                                <p>{request.state}</p>
+                            </Request>
+                        )
+                        }
                     </div>
                 }
                 <div ref="form">

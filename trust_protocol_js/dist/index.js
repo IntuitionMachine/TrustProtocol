@@ -115,10 +115,10 @@ var Trusts = /** @class */ (function () {
     };
     Trusts.prototype.create = function (client, trustee, name) {
         return __awaiter(this, void 0, void 0, function () {
-            var utils, foo;
+            var utils, created;
             return __generator(this, function (_a) {
                 utils = this.Db.params.web3.utils;
-                foo = this.Db.contract.methods.addTrust(client, trustee, utils.asciiToHex(name)).send({ from: this.Db.params.userId });
+                created = this.Db.contract.methods.addTrust(client, trustee, utils.asciiToHex(name)).send({ from: this.Db.params.userId });
                 return [2 /*return*/];
             });
         });

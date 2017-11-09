@@ -63,7 +63,7 @@ export class Trusts {
 
     async create(client, trustee, name){
         const utils = this.Db.params.web3.utils;
-        const foo = this.Db.contract.methods.addTrust(client, trustee, utils.asciiToHex(name)).send({from: this.Db.params.userId});
+        const created = this.Db.contract.methods.addTrust(client, trustee, utils.asciiToHex(name)).send({from: this.Db.params.userId});
     }
 }
 
