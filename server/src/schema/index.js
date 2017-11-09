@@ -8,6 +8,7 @@ const typeDefs = `
     client: String!
     trustee: String!
     name: String!
+    requests: [Request]
   }
 
   type Request {

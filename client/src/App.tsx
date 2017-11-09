@@ -49,7 +49,9 @@ class App extends React.Component<any, any> {
     return (
       <ApolloProvider store={store} client={client}>
         <BrowserRouter>
+          <div className="container">
           <Routes web3Params={this.state.web3Params}/>
+          </div>
         </BrowserRouter>
       </ApolloProvider>
     );

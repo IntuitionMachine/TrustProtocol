@@ -4,8 +4,11 @@ import {trustProtocol} from "../utils/trustProtocol.js"
 
 const Query = {
   Trust: async (_, data) => {
+    //TODO: Find way of only loading requests when needed (couldn't find out how to get info on what data is requested here)
     const trust = await trustProtocol.trusts.get(data.id);
-    return {id:data.id, ...trust};
+    const requests = await trustProtocol.requests.getAll();
+    let trustRequests = requests.filter(r => r.trustId === data.id);
+    return {id:data.id, ...trust, requests: trustRequests};
   },
 
   allTrusts: async () => { 
@@ -13,8 +16,8 @@ const Query = {
   }, 
 
   Request: async (_, data) => {
-    const trust = await trustProtocol.requests.get(data.id);
-    return {id, ...trust};
+    const request = await trustProtocol.requests.get(data.id);
+    return {id, ...request};
   },
 
   allRequests: async (_, data) => {

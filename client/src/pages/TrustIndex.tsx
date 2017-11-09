@@ -29,7 +29,7 @@ class _TrustIndex extends React.Component<any, any> {
     public render() {
         const _trusts = this.props.trusts.allTrusts;
         return (
-            <div className="container">
+            <div>
                 {_trusts && _trusts.map((r: any, i: any) => (
                     <div key={i}>name: {r.name} client: {r.client} trustee: {r.trustee} </div>
                 ))}
