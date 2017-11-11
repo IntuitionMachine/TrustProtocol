@@ -73,17 +73,19 @@ class _TrustShow extends React.Component<any, any> {
     }
 
     public render() {
+        const {Trust} = this.props.trust
+        const isClient = this.props.web3Params.userId === (Trust && Trust.client);
         return (
             <div>
-                {this.props.trust.Trust &&
+                {Trust &&
                     <div>
-                        <h2>{this.props.trust.Trust.name}</h2>
-                        <strong>{`client: ${this.props.trust.Trust.client}`}</strong>
+                        <h2>{Trust.name}</h2>
+                        <strong>{`client: ${Trust.client}`}</strong>
                         <br />
-                        <strong>{`fiduciary: ${this.props.trust.Trust.trustee}`}</strong>
+                        <strong>{`fiduciary: ${Trust.trustee}`}</strong>
                         <h3>Requests </h3>
-                        {this.props.trust.Trust.requests.map(request =>
-                            <Row>
+                        {Trust.requests.map(request =>
+                            <Row key={request.title}>
                                 <Col xs={8}>
                                     <Request>
                                         <h3>{request.title}</h3>
@@ -98,10 +100,10 @@ class _TrustShow extends React.Component<any, any> {
                         }
                     </div>
                 }
-                {this.state.showForm &&
+                {isClient && this.state.showForm &&
                     <Form createRequest={this.createRequest} onHide={() => {this.setState({showForm:false})}}/>
                 }
-                {!this.state.showForm &&
+                {isClient && !this.state.showForm &&
                     <Button onClick={() => {this.setState({showForm:true})}} >
                        Show Form 
                     </Button>
