@@ -7,6 +7,7 @@ import {TrustIndex} from "./pages/TrustIndex";
 import {TrustShow} from "./pages/TrustShow";
 import getWeb3 from "./utils/getWeb3";
 
+const dotenv = require('dotenv').config();
 const networkInterface = createNetworkInterface({ uri: process.env.REACT_APP_SERVER_URL });
 const reduxDevtoolsMiddleware =
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__();

@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 const express = require('express');
 
 // This package automatically parses JSON requests.
@@ -12,6 +14,7 @@ const schema = require('./src/schema');
 var app = express();
 
 app.use(cors())
+
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));
