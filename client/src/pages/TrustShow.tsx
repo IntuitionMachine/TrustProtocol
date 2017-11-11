@@ -44,7 +44,7 @@ class Form extends React.Component<any, any> {
             placeholder="Enter text"
         />
         <FieldGroup
-            id="trustee"
+            id="description"
             type="text"
             label="Description"
             placeholder="Enter text"
@@ -65,6 +65,8 @@ class _TrustShow extends React.Component<any, any> {
         super(props);
         this.state = { showForm: false }
         this.createRequest = this.createRequest.bind(this);
+        this.acceptRequest = this.acceptRequest.bind(this);
+        this.deliverRequest = this.deliverRequest.bind(this);
     }
 
     public createRequest(title, description){
@@ -73,12 +75,19 @@ class _TrustShow extends React.Component<any, any> {
     }
 
     public acceptRequest(requestId){
+        const trustProtocol = new TrustProtocolJs(this.props.web3Params);
+        trustProtocol.requests.accept(requestId)
+    }
+
+    public deliverRequest(requestId){
+        const trustProtocol = new TrustProtocolJs(this.props.web3Params);
+        trustProtocol.requests.deliver(requestId)
     }
 
     public render() {
         const {Trust} = this.props.trust
         const isClient = this.props.web3Params.userId === (Trust && Trust.client);
-        const isFiduciary = this.props.web3Params.userId === (Trust && Trust.trustee);
+        const isFiduciary = this.props.web3Params.userId === (Trust && Trust.fiduciary);
         return (
             <div>
                 {Trust &&
@@ -86,7 +95,7 @@ class _TrustShow extends React.Component<any, any> {
                         <h2>{Trust.name}</h2>
                         <strong>{`client: ${Trust.client}`}</strong>
                         <br />
-                        <strong>{`fiduciary: ${Trust.trustee}`}</strong>
+                        <strong>{`fiduciary: ${Trust.fiduciary}`}</strong>
                         <h3>Requests </h3>
                         {Trust.requests.map(request =>
                             <Row key={request.title}>
@@ -99,8 +108,13 @@ class _TrustShow extends React.Component<any, any> {
                                 <Col xs={4}>
                                     <p>{request.state}</p>
                                     {isFiduciary && (request.state === "REQUESTED") && 
-                                        <Button>
+                                        <Button onClick={() => this.acceptRequest(request.id)}>
                                             START
+                                        </Button>
+                                    }
+                                    {isFiduciary && (request.state === "ACCEPTED") && 
+                                        <Button onClick={() => this.deliverRequest(request.id)}>
+                                           DELIVER 
                                         </Button>
                                     }
                                 </Col>
@@ -129,6 +143,7 @@ const TRUSTS_QUERY = gql`
         client
         fiduciary 
         requests{
+          id
           title
           description
           state
