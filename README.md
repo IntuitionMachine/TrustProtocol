@@ -25,7 +25,6 @@ npm run start
 **Necessary environment variables** .
 
 PROVIDER_URL: Ethereum provider, i.e "https://mainnet.infura.io:XYZ"  
-TRUST_CONTRACT_ADDRESS: Ethereum coin contract address for a specific trust in question   
 SECRET_KEY: Secret key of the ethereum address to mint coins from  
 PORT: Port for server to run on, i.e "8080"  
 

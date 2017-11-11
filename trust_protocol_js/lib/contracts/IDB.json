@@ -75,12 +75,16 @@
       "constant": true,
       "inputs": [
         {
-          "name": "_index",
+          "name": "_i",
           "type": "uint256"
         }
       ],
       "name": "getTrust",
       "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
         {
           "name": "",
           "type": "address"
@@ -114,5 +118,5 @@
   "unlinked_binary": "0x",
   "networks": {},
   "schema_version": "0.0.5",
-  "updated_at": 1509754612848
+  "updated_at": 1510372619176
 }

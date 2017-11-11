@@ -6,7 +6,7 @@ const typeDefs = `
   type Trust {
     id: ID! 
     client: String!
-    trustee: String!
+    fiduciary: String!
     name: String!
     requests: [Request]
   }

@@ -72,9 +72,13 @@ class _TrustShow extends React.Component<any, any> {
         trustProtocol.requests.create(this.props.match.params.id, title, description)
     }
 
+    public acceptRequest(requestId){
+    }
+
     public render() {
         const {Trust} = this.props.trust
         const isClient = this.props.web3Params.userId === (Trust && Trust.client);
+        const isFiduciary = this.props.web3Params.userId === (Trust && Trust.trustee);
         return (
             <div>
                 {Trust &&
@@ -94,6 +98,11 @@ class _TrustShow extends React.Component<any, any> {
                                 </Col>
                                 <Col xs={4}>
                                     <p>{request.state}</p>
+                                    {isFiduciary && (request.state === "REQUESTED") && 
+                                        <Button>
+                                            START
+                                        </Button>
+                                    }
                                 </Col>
                             </Row>
                         )
@@ -118,7 +127,7 @@ const TRUSTS_QUERY = gql`
     Trust(id: $id){
         name
         client
-        trustee
+        fiduciary 
         requests{
           title
           description

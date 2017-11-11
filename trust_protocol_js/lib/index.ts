@@ -13,8 +13,8 @@ export class TrustProtocolJs {
     constructor(params){
         this.params = params;
         this.abi = _DB["abi"];
-        this.location = "0xbbbdad4b8cecbe90aed7c30e17796f23c95fc6d8";
-        this.contract = new this.params.web3.eth.Contract(this.abi, this.location)
+        this.location = "0x6db6a3f8ab7bab4d5062c4794f966cecb70b15a6";
+        this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
         this.trusts = new Trusts(this);
         this.requests = new Requests(this);
         return this;
@@ -38,9 +38,10 @@ export class Trusts {
 
     _format(trust:any) {
         return {
-            client: trust[0],
-            trustee: trust[1],
-            name: this.Db.params.web3.utils.hexToAscii(trust[2])
+            id: trust[0],
+            client: trust[1],
+            fiduciary: trust[2],
+            name: this.Db.params.web3.utils.hexToAscii(trust[3])
         } 
     }
 
@@ -56,14 +57,15 @@ export class Trusts {
 
     async getAll(){
         const count: any = await this.getCount();
+        _.range(count).map(i => {console.log("getting", i, count)})
         return await Promise.all(
-            _.range(count).map(i => this.get(i))
+            _.range(count).map(i => this.get(i + 1))
         )
     }
 
-    async create(client, trustee, name){
+    async create(client, fiduciary, name){
         const utils = this.Db.params.web3.utils;
-        const created = this.Db.contract.methods.addTrust(client, trustee, utils.asciiToHex(name)).send({from: this.Db.params.userId});
+        const created = this.Db.contract.methods.addTrust(client, fiduciary, utils.asciiToHex(name)).send({from: this.Db.params.userId});
     }
 }
 
@@ -76,15 +78,16 @@ export class Requests {
 
     _format(_request:any) {
         return {
-            trustId: _request[0],
-            title: this.Db.params.web3.utils.hexToAscii(_request[1]),
-            description: this.Db.params.web3.utils.hexToAscii(_request[2]),
+            id: _request[0],
+            trustId: _request[1],
+            title: this.Db.params.web3.utils.hexToAscii(_request[2]),
+            description: this.Db.params.web3.utils.hexToAscii(_request[3]),
             state: {
                 "0": "REQUESTED",
                 "1": "ACCEPTED",
                 "2": "DELIVERED",
                 "3": "REJECTED"
-            }[_request[3]],
+            }[_request[4]],
         } 
     }
 
@@ -97,10 +100,11 @@ export class Requests {
         return await promisify(this.Db.contract.methods.getRequestCount().call, {});
     }
 
-    async getAll(id){
+    async getAll(){
         const count: any = await this.getCount();
+        console.log("COUNT", count);
         return await Promise.all(
-            _.range(count).map(i => this.get(i))
+            _.range(count).map(i => this.get(i + 1))
         )
     }
 
@@ -109,11 +113,11 @@ export class Requests {
         return await promisify(this.Db.contract.methods.addRequest(trustId, utils.asciiToHex(title), utils.asciiToHex(description)).send, {from: this.Db.params.userId});
     }
 
-    async accept(){
-        return await promisify(this.Db.contract.methods.acceptRequest().send, {from: this.Db.params.userId});
+    async accept(requestId){
+        return await promisify(this.Db.contract.methods.acceptRequest(requestId).send, {from: this.Db.params.userId});
     }
 
-    async deliver(){
-        return await promisify(this.Db.contract.methods.deliverRequest().send, {from: this.Db.params.userId});
+    async deliver(requestId){
+        return await promisify(this.Db.contract.methods.deliverRequest(requestId).send, {from: this.Db.params.userId});
     }
 }

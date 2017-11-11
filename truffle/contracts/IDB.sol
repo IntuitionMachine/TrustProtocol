@@ -1,7 +1,7 @@
 pragma solidity ^0.4.15;
 
 contract IDB {
-    function getTrust(uint _index) public constant returns(address, address, bytes32);
+    function getTrust(uint _i) public constant returns(uint, address, address, bytes32);
     function getTrustCount() public constant returns(uint);
     function addRequest(uint trustIndex, bytes32 title, bytes32 description) public;
     function getRequestCount() public constant returns(uint);

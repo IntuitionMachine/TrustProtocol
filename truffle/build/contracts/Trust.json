@@ -1,13 +1,44 @@
 {
   "contract_name": "Trust",
-  "abi": [],
-  "unlinked_binary": "0x60606040523415600e57600080fd5b5b603680601c6000396000f30060606040525b600080fd00a165627a7a723058207d6c885eb44fa16a22939ac75e6505511a25919d812050a9ad9705940653c32c0029",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "Trust.Data storage"
+        }
+      ],
+      "name": "get",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60ea8061001e6000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166313c9a6668114603c575b600080fd5b60456004356088565b60405193845273ffffffffffffffffffffffffffffffffffffffff9283166020850152911660408084019190915260608301919091526080909101905180910390f35b805460018201546002830154600384015473ffffffffffffffffffffffffffffffffffffffff92831692909116905b91935091935600a165627a7a723058200b69cf9f96aa58eaa41fa4cc59e58e4907caa71599b7f44115ebbddf2c67b2cb0029",
   "networks": {
     "3": {
       "events": {},
       "links": {},
-      "address": "0x78a5a77491f95a590da0b4bf1fcf4006f435db46",
-      "updated_at": 1509758289919
+      "address": "0x3cdab83ab59ac40eaa896fd42111baab9c575c34",
+      "updated_at": 1510374214380
     },
     "1509748114543": {
       "events": {},
@@ -17,5 +48,5 @@
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1509758289919
+  "updated_at": 1510374214380
 }

@@ -22,16 +22,16 @@ class _TrustIndex extends React.Component<any, any> {
         const trustProtocol = new TrustProtocolJs(this.props.web3Params);
         const form:any = this.refs.form;
         const client = form.getElementsByTagName("input")[0].value;
-        const trustee = form.getElementsByTagName("input")[1].value;
+        const fiduciary = form.getElementsByTagName("input")[1].value;
         const name = form.getElementsByTagName("input")[2].value;
-        const trust = await trustProtocol.trusts.create(client, trustee, name)
+        const trust = await trustProtocol.trusts.create(client, fiduciary, name)
     }
     public render() {
         const _trusts = this.props.trusts.allTrusts;
         return (
             <div>
                 {_trusts && _trusts.map((r: any, i: any) => (
-                    <div key={i}>name: {r.name} client: {r.client} trustee: {r.trustee} </div>
+                    <div key={i}>name: {r.name} client: {r.client} fiduciary: {r.fiduciary} </div>
                 ))}
                 <div onClick={this.createRequest}>
                     hiii
@@ -44,9 +44,9 @@ class _TrustIndex extends React.Component<any, any> {
                         placeholder="Enter text"
                     />
                     <FieldGroup
-                        id="trustee"
+                        id="fiduciary"
                         type="text"
-                        label="Trustee Address"
+                        label="fiduciary Address"
                         placeholder="Enter text"
                     />
                     <FieldGroup
@@ -67,9 +67,10 @@ class _TrustIndex extends React.Component<any, any> {
 const TRUSTS_QUERY = gql`
 query{
   allTrusts{
+    id
     name
     client
-    trustee
+    fiduciary
   }
 }
 `;

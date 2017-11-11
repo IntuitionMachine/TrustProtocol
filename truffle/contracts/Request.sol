@@ -10,6 +10,7 @@ library Request {
     }
     
     struct Data { 
+        uint id;
         uint trustId;
         bytes32 title;
         bytes32 description;
@@ -31,16 +32,16 @@ library Request {
     }
     
     function client(Data storage self) public returns(address) {
-        var (_client,,) = self.db.getTrust(self.trustId);
+        var (,_client,,) = self.db.getTrust(self.trustId);
         return _client;
     }
     
-    function trustee(Data storage self) public returns(address) {
-        var (,_trustee,) = self.db.getTrust(self.trustId);
-        return _trustee;
+    function fiduciary(Data storage self) public returns(address) {
+        var (,,_fiduciary,) = self.db.getTrust(self.trustId);
+        return _fiduciary;
     }
 
-    function get(Data storage self) public returns(uint, bytes32, bytes32, States) {
-        return (self.trustId, self.title, self.description, self.state);
+    function get(Data storage self) public returns(uint, uint, bytes32, bytes32, States) {
+        return (self.id, self.trustId, self.title, self.description, self.state);
     }
 }
