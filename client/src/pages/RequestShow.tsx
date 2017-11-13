@@ -162,13 +162,13 @@ const TRUSTS_QUERY = gql`
     }
 `;
 
-export const TrustShow = compose(
+export const RequestShow = compose(
     (Component) => (props) => {
         const EnhancedComponent = graphql(TRUSTS_QUERY, {
             name: "trust",
             options: {
                 variables: {
-                    id: props.match.params.id,
+                    id: props.match.params.trustId,
                 },
             },
         })(Component);

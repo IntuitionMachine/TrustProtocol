@@ -102,7 +102,6 @@ export class Requests {
 
     async getAll(){
         const count: any = await this.getCount();
-        console.log("COUNT", count);
         return await Promise.all(
             _.range(count).map(i => this.get(i + 1))
         )
