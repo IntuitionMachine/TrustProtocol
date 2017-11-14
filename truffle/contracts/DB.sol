@@ -50,4 +50,18 @@ contract DB is IDB {
         changeRequestState(_id, Request.States.Delivered);
         return true;
     }
+
+    event RegisterDeliverAttachment(uint requestId, bytes32 proof);
+
+    function requestDeliverDocument(uint _requestId, bytes32 _proof) public returns(bool) {
+        RegisterDeliverAttachment(_requestId, _proof);
+        return true;
+    }
+
+    event RegisterDeliverDescription(uint requestId, bytes32 description);
+
+    function requestDeliverDescription(uint _requestId, bytes32 _description) public returns(bool) {
+        RegisterDeliverAttachment(_requestId, _description);
+        return true;
+    }
 }

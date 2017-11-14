@@ -42,7 +42,10 @@ var TrustProtocolJs = /** @class */ (function () {
     function TrustProtocolJs(params) {
         this.params = params;
         this.abi = _DB["abi"];
-        this.location = "0x6db6a3f8ab7bab4d5062c4794f966cecb70b15a6";
+        //ropsten
+        // this.location = "0x6db6a3f8ab7bab4d5062c4794f966cecb70b15a6";
+        //testrpc
+        this.location = "0x009bc03a00e59c8f5301183fa775afcc8dea5752";
         this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
         this.trusts = new Trusts(this);
         this.requests = new Requests(this);
@@ -53,12 +56,12 @@ var TrustProtocolJs = /** @class */ (function () {
 exports.TrustProtocolJs = TrustProtocolJs;
 var promisify = function (inner, args) {
     return new Promise(function (resolve, reject) {
-        return inner(args, function (err, res) {
-            if (err) {
-                reject(err);
-            }
-            resolve(res);
-        });
+        return inner.apply(void 0, args.concat([function (err, res) {
+                if (err) {
+                    reject(err);
+                }
+                resolve(res);
+            }]));
     });
 };
 var Trusts = /** @class */ (function () {
@@ -78,7 +81,7 @@ var Trusts = /** @class */ (function () {
             var count;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getTrustCount().call, {})];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getTrustCount().call, [{}])];
                     case 1:
                         count = _a.sent();
                         return [2 /*return*/, count];
@@ -91,7 +94,7 @@ var Trusts = /** @class */ (function () {
             var trust;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getTrust(id).call, {})];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getTrust(id).call, [{}])];
                     case 1:
                         trust = _a.sent();
                         return [2 /*return*/, this._format(trust)];
@@ -151,7 +154,7 @@ var Requests = /** @class */ (function () {
             var _request;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getRequest(id).call, {})];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getRequest(id).call, [{}])];
                     case 1:
                         _request = _a.sent();
                         return [2 /*return*/, this._format(_request)];
@@ -163,7 +166,7 @@ var Requests = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getRequestCount().call, {})];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.getRequestCount().call, [{}])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -178,7 +181,6 @@ var Requests = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.getCount()];
                     case 1:
                         count = _a.sent();
-                        console.log("COUNT", count);
                         return [4 /*yield*/, Promise.all(_.range(count).map(function (i) { return _this.get(i + 1); }))];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
@@ -192,7 +194,7 @@ var Requests = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         utils = this.Db.params.web3.utils;
-                        return [4 /*yield*/, promisify(this.Db.contract.methods.addRequest(trustId, utils.asciiToHex(title), utils.asciiToHex(description)).send, { from: this.Db.params.userId })];
+                        return [4 /*yield*/, promisify(this.Db.contract.methods.addRequest(trustId, utils.asciiToHex(title), utils.asciiToHex(description)).send, [{ from: this.Db.params.userId }])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -202,7 +204,7 @@ var Requests = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.acceptRequest(requestId).send, { from: this.Db.params.userId })];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.acceptRequest(requestId).send, [{ from: this.Db.params.userId }])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -212,7 +214,33 @@ var Requests = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.deliverRequest(requestId).send, { from: this.Db.params.userId })];
+                    case 0: return [4 /*yield*/, promisify(this.Db.contract.methods.deliverRequest(requestId).send, [{ from: this.Db.params.userId }])];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Requests.prototype.requestDeliverDocument = function (requestId, documentHash) {
+        return __awaiter(this, void 0, void 0, function () {
+            var utils;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        utils = this.Db.params.web3.utils;
+                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverDocument(requestId, utils.asciiToHex(documentHash)).send, [{ from: this.Db.params.userId }])];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Requests.prototype.requestDeliverDescription = function (requestId, description) {
+        return __awaiter(this, void 0, void 0, function () {
+            var utils;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        utils = this.Db.params.web3.utils;
+                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverDocument(requestId, utils.asciiToHex(description)).send, [{ from: this.Db.params.userId }])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

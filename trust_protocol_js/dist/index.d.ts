@@ -62,4 +62,6 @@ export declare class Requests {
     create(trustId: any, title: any, description: any): Promise<{}>;
     accept(requestId: any): Promise<{}>;
     deliver(requestId: any): Promise<{}>;
+    requestDeliverDocument(requestId: any, documentHash: any): Promise<{}>;
+    requestDeliverDescription(requestId: any, description: any): Promise<{}>;
 }

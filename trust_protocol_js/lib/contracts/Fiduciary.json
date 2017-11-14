@@ -1,0 +1,35 @@
+{
+  "contract_name": "Fiduciary",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "Fiduciary.Data storage"
+        }
+      ],
+      "name": "get",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60d58061001e6000396000f300606060405263ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663213bd4488114603c575b600080fd5b6045600435607f565b604051928352602083019190915273ffffffffffffffffffffffffffffffffffffffff166040808301919091526060909101905180910390f35b80546001820154600283015473ffffffffffffffffffffffffffffffffffffffff165b91939092505600a165627a7a72305820d5f7c998089e28f6fab7745b36c48e56b5b06e5f38e56114945b53cc0bdb278a0029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1510618803709
+}

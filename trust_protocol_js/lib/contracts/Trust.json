@@ -37,8 +37,8 @@
     "3": {
       "events": {},
       "links": {},
-      "address": "0x907452c0f58553db55e21c8f0c7b77154939bab2",
-      "updated_at": 1510370642120
+      "address": "0x3cdab83ab59ac40eaa896fd42111baab9c575c34",
+      "updated_at": 1510374214380
     },
     "1509748114543": {
       "events": {},
@@ -48,5 +48,5 @@
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1510372619176
+  "updated_at": 1510618803710
 }

@@ -5,8 +5,10 @@
   "dependencies": {
     "apollo-client": "^1.9.1",
     "bignumber.js": "^4.1.0",
+    "buffer": "^5.0.8",
     "dotenv": "^4.0.0",
     "graphql-tag": "^2.5.0",
+    "ipfs-api": "^15.0.2",
     "react": "^16.0.0",
     "react-apollo": "^1.4.14",
     "react-bootstrap": "^0.31.5",

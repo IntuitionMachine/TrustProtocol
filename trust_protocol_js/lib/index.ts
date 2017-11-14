@@ -13,7 +13,12 @@ export class TrustProtocolJs {
     constructor(params){
         this.params = params;
         this.abi = _DB["abi"];
-        this.location = "0x6db6a3f8ab7bab4d5062c4794f966cecb70b15a6";
+        //ropsten
+        // this.location = "0x6db6a3f8ab7bab4d5062c4794f966cecb70b15a6";
+
+        //testrpc
+        this.location = "0x009bc03a00e59c8f5301183fa775afcc8dea5752";
+
         this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
         this.trusts = new Trusts(this);
         this.requests = new Requests(this);
@@ -23,7 +28,7 @@ export class TrustProtocolJs {
 
 const promisify = (inner: any, args: any) =>
   new Promise((resolve:any, reject:any) =>
-    inner(args, (err:any, res:any) => {
+    inner(...args, (err:any, res:any) => {
       if (err) { reject(err) }
       resolve(res);
     })
@@ -46,12 +51,12 @@ export class Trusts {
     }
 
     async getCount(){
-        const count = await promisify(this.Db.contract.methods.getTrustCount().call, {});
+        const count = await promisify(this.Db.contract.methods.getTrustCount().call, [{}]);
         return count
     }
 
     async get(id){
-        const trust = await promisify(this.Db.contract.methods.getTrust(id).call, {});
+        const trust = await promisify(this.Db.contract.methods.getTrust(id).call, [{}]);
         return this._format(trust);
     }
 
@@ -92,12 +97,12 @@ export class Requests {
     }
 
     async get(id){
-        const _request = await promisify(this.Db.contract.methods.getRequest(id).call, {});
+        const _request = await promisify(this.Db.contract.methods.getRequest(id).call, [{}]);
         return this._format(_request);
     }
 
     async getCount(){
-        return await promisify(this.Db.contract.methods.getRequestCount().call, {});
+        return await promisify(this.Db.contract.methods.getRequestCount().call, [{}]);
     }
 
     async getAll(){
@@ -109,14 +114,36 @@ export class Requests {
 
     async create(trustId, title, description){
         const utils = this.Db.params.web3.utils;
-        return await promisify(this.Db.contract.methods.addRequest(trustId, utils.asciiToHex(title), utils.asciiToHex(description)).send, {from: this.Db.params.userId});
+        return await promisify(this.Db.contract.methods.addRequest(trustId, utils.asciiToHex(title), utils.asciiToHex(description)).send, [{from: this.Db.params.userId}]);
     }
 
     async accept(requestId){
-        return await promisify(this.Db.contract.methods.acceptRequest(requestId).send, {from: this.Db.params.userId});
+        return await promisify(this.Db.contract.methods.acceptRequest(requestId).send, [{from: this.Db.params.userId}]);
     }
 
     async deliver(requestId){
-        return await promisify(this.Db.contract.methods.deliverRequest(requestId).send, {from: this.Db.params.userId});
+        return await promisify(this.Db.contract.methods.deliverRequest(requestId).send, [{from: this.Db.params.userId}]);
     }
+
+    async requestDeliverDocument(requestId, documentHash){
+        const utils = this.Db.params.web3.utils;
+        return await promisify(this.Db.contract.methods.requestDeliverDocument(requestId, utils.asciiToHex(documentHash)).send, [{from: this.Db.params.userId}]);
+    }
+
+    async requestDeliverDescription(requestId, description){
+        const utils = this.Db.params.web3.utils;
+        return await promisify(this.Db.contract.methods.requestDeliverDocument(requestId, utils.asciiToHex(description)).send, [{from: this.Db.params.userId}]);
+    }
+
+    // async getLogs(){
+        // const utils = this.Db.params.web3.utils;
+        // const pastEvents:any = await promisify(this.Db.contract.getPastEvents, ['RegisterDeliverAttachment', {
+        //     fromBlock: 0,
+        //     toBlock: 'latest'
+        // }])
+        // console.log(pastEvents)
+        // const messages = pastEvents.map(r => [r.returnValues.requestId, r.returnValues.proof])
+        // console.log(messages)
+        // return messages
+    // }
 }
