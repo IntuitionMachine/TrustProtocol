@@ -45,7 +45,7 @@ var TrustProtocolJs = /** @class */ (function () {
         //ropsten
         // this.location = "0x6db6a3f8ab7bab4d5062c4794f966cecb70b15a6";
         //testrpc
-        this.location = "0x009bc03a00e59c8f5301183fa775afcc8dea5752";
+        this.location = "0xabc377fcdb03bad430c07309029d37c3c957c82a";
         this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
         this.trusts = new Trusts(this);
         this.requests = new Requests(this);
@@ -227,7 +227,7 @@ var Requests = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         utils = this.Db.params.web3.utils;
-                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverDocument(requestId, utils.asciiToHex(documentHash)).send, [{ from: this.Db.params.userId }])];
+                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverAttachment(requestId, utils.asciiToHex(documentHash)).send, [{ from: this.Db.params.userId }])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -240,9 +240,35 @@ var Requests = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         utils = this.Db.params.web3.utils;
-                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverDocument(requestId, utils.asciiToHex(description)).send, [{ from: this.Db.params.userId }])];
+                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverDescription(requestId, utils.asciiToHex(description)).send, [{ from: this.Db.params.userId }])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
+            });
+        });
+    };
+    Requests.prototype.getLogs = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var utils;
+            return __generator(this, function (_a) {
+                console.log(11);
+                utils = this.Db.params.web3.utils;
+                console.log(22);
+                // const pastEvents:any = await promisify(this.Db.contract.allEvents, {
+                //     fromBlock: 3500,
+                //     toBlock: 'latest'
+                // })
+                // console.log(pastEvents)
+                // this.Db.contract.allEvents({fromBlock: 3500, toBlock: 'latest'})
+                // .then(e => {console.log("HI", e)})
+                this.Db.contract.getPastEvents('RequestDeliverAttachment', {
+                    fromBlock: 0,
+                    toBlock: 'latest'
+                }, function (err, e) { console.log("YO", err, e); });
+                // console.log("IN LOGS", pastEvents)
+                // const messages = pastEvents.map(r => [r.returnValues.requestId, r.returnValues.proof])
+                // console.log(messages)
+                // return messages
+                return [2 /*return*/, [1, 2, 3]];
             });
         });
     };

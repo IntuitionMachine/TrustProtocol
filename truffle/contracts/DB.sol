@@ -53,7 +53,7 @@ contract DB is IDB {
 
     event RegisterDeliverAttachment(uint requestId, bytes32 proof);
 
-    function requestDeliverDocument(uint _requestId, bytes32 _proof) public returns(bool) {
+    function requestDeliverAttachment(uint _requestId, bytes32 _proof) public returns(bool) {
         RegisterDeliverAttachment(_requestId, _proof);
         return true;
     }

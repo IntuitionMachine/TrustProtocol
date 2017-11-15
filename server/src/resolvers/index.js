@@ -12,6 +12,7 @@ const Query = {
   },
 
   allTrusts: async () => { 
+    let logs = await trustProtocol.requests.getLogs();
     return await trustProtocol.trusts.getAll();
   }, 
 

@@ -64,4 +64,5 @@ export declare class Requests {
     deliver(requestId: any): Promise<{}>;
     requestDeliverDocument(requestId: any, documentHash: any): Promise<{}>;
     requestDeliverDescription(requestId: any, description: any): Promise<{}>;
+    getLogs(): Promise<number[]>;
 }
