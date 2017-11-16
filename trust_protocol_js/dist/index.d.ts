@@ -62,7 +62,9 @@ export declare class Requests {
     create(trustId: any, title: any, description: any): Promise<{}>;
     accept(requestId: any): Promise<{}>;
     deliver(requestId: any): Promise<{}>;
-    requestDeliverDocument(requestId: any, documentHash: any): Promise<{}>;
-    requestDeliverDescription(requestId: any, description: any): Promise<{}>;
-    getLogs(): Promise<number[]>;
+    requestDeliveryAttachment(requestId: any, documentHash: any): Promise<{}>;
+    requestDeliveryDescription(requestId: any, description: any): Promise<{}>;
+    getPastEvents(requestId: any, name: any): Promise<any>;
+    getDeliveryAttachments(requestId: any): Promise<any>;
+    getDeliveryDescription(requestId: any): Promise<any>;
 }

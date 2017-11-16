@@ -38,6 +38,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import Web3 from 'web3';
 var _DB = require("./contracts/DB.json");
 var _ = require("lodash");
+var bs58 = require("bs58");
+var buffer_1 = require("buffer");
 var TrustProtocolJs = /** @class */ (function () {
     function TrustProtocolJs(params) {
         this.params = params;
@@ -45,7 +47,7 @@ var TrustProtocolJs = /** @class */ (function () {
         //ropsten
         // this.location = "0x6db6a3f8ab7bab4d5062c4794f966cecb70b15a6";
         //testrpc
-        this.location = "0xabc377fcdb03bad430c07309029d37c3c957c82a";
+        this.location = "0x5fd36b591cc3a83e319615d3817db34130b1d0b3";
         this.contract = new this.params.web3.eth.Contract(this.abi, this.location);
         this.trusts = new Trusts(this);
         this.requests = new Requests(this);
@@ -220,58 +222,90 @@ var Requests = /** @class */ (function () {
             });
         });
     };
-    Requests.prototype.requestDeliverDocument = function (requestId, documentHash) {
+    Requests.prototype.requestDeliveryAttachment = function (requestId, documentHash) {
         return __awaiter(this, void 0, void 0, function () {
             var utils;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         utils = this.Db.params.web3.utils;
-                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverAttachment(requestId, utils.asciiToHex(documentHash)).send, [{ from: this.Db.params.userId }])];
+                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliveryAttachment(requestId, ipfsHashToBytes32(documentHash)).send, [{ from: this.Db.params.userId }])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    Requests.prototype.requestDeliverDescription = function (requestId, description) {
+    Requests.prototype.requestDeliveryDescription = function (requestId, description) {
         return __awaiter(this, void 0, void 0, function () {
             var utils;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         utils = this.Db.params.web3.utils;
-                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliverDescription(requestId, utils.asciiToHex(description)).send, [{ from: this.Db.params.userId }])];
+                        return [4 /*yield*/, promisify(this.Db.contract.methods.requestDeliveryDescription(requestId, ipfsHashToBytes32(description)).send, [{ from: this.Db.params.userId }])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    Requests.prototype.getLogs = function () {
+    Requests.prototype.getPastEvents = function (requestId, name) {
         return __awaiter(this, void 0, void 0, function () {
-            var utils;
             return __generator(this, function (_a) {
-                console.log(11);
-                utils = this.Db.params.web3.utils;
-                console.log(22);
-                // const pastEvents:any = await promisify(this.Db.contract.allEvents, {
-                //     fromBlock: 3500,
-                //     toBlock: 'latest'
-                // })
-                // console.log(pastEvents)
-                // this.Db.contract.allEvents({fromBlock: 3500, toBlock: 'latest'})
-                // .then(e => {console.log("HI", e)})
-                this.Db.contract.getPastEvents('RequestDeliverAttachment', {
-                    fromBlock: 0,
-                    toBlock: 'latest'
-                }, function (err, e) { console.log("YO", err, e); });
-                // console.log("IN LOGS", pastEvents)
-                // const messages = pastEvents.map(r => [r.returnValues.requestId, r.returnValues.proof])
-                // console.log(messages)
-                // return messages
-                return [2 /*return*/, [1, 2, 3]];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.Db.contract.getPastEvents(name, {
+                            filter: { requestId: requestId },
+                            fromBlock: 0,
+                            toBlock: 'latest'
+                        })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Requests.prototype.getDeliveryAttachments = function (requestId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var utils, events;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        utils = this.Db.params.web3.utils;
+                        return [4 /*yield*/, this.getPastEvents(requestId, 'RegisterDeliveryAttachment')];
+                    case 1:
+                        events = _a.sent();
+                        return [2 /*return*/, events.map(function (r) {
+                                return bytes32ToIPFSHash(r.returnValues.proof);
+                            })];
+                }
+            });
+        });
+    };
+    Requests.prototype.getDeliveryDescription = function (requestId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var utils, events;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        utils = this.Db.params.web3.utils;
+                        return [4 /*yield*/, this.getPastEvents(requestId, 'RegisterDeliveryDescription')];
+                    case 1:
+                        events = _a.sent();
+                        return [2 /*return*/, events.map(function (r) { return bytes32ToIPFSHash(r.returnValues.description); })];
+                }
             });
         });
     };
     return Requests;
 }());
 exports.Requests = Requests;
+function ipfsHashToBytes32(ipfs_hash) {
+    var h = bs58.decode(ipfs_hash).toString('hex').replace(/^1220/, '');
+    if (h.length != 64) {
+        console.log('invalid ipfs format', ipfs_hash, h);
+        return null;
+    }
+    return '0x' + h;
+}
+function bytes32ToIPFSHash(hash_hex) {
+    var buf = new buffer_1.Buffer(hash_hex.replace(/^0x/, '1220'), 'hex');
+    return bs58.encode(buf);
+}

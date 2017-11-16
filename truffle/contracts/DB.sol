@@ -51,17 +51,17 @@ contract DB is IDB {
         return true;
     }
 
-    event RegisterDeliverAttachment(uint requestId, bytes32 proof);
+    event RegisterDeliveryAttachment(uint indexed requestId, bytes32 proof);
 
-    function requestDeliverAttachment(uint _requestId, bytes32 _proof) public returns(bool) {
-        RegisterDeliverAttachment(_requestId, _proof);
+    function requestDeliveryAttachment(uint _requestId, bytes32 _proof) constant public returns(bool) {
+        RegisterDeliveryAttachment(_requestId, _proof);
         return true;
     }
 
-    event RegisterDeliverDescription(uint requestId, bytes32 description);
+    event RegisterDeliveryDescription(uint indexed requestId, bytes32 description);
 
-    function requestDeliverDescription(uint _requestId, bytes32 _description) public returns(bool) {
-        RegisterDeliverAttachment(_requestId, _description);
+    function requestDeliveryDescription(uint _requestId, bytes32 _description) constant public returns(bool) {
+        RegisterDeliveryAttachment(_requestId, _description);
         return true;
     }
 }

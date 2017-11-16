@@ -113,7 +113,7 @@ class _TrustShow extends React.Component<any, any> {
                 console.log("GOT RESPONSE", response)
                 ipfsId = response[0].hash
                 console.log("HASH", ipfsId)
-                trustProtocol.requests.requestDeliverDocument(1, ipfsId)
+                trustProtocol.requests.requestDeliveryAttachment(this.props.trust.Trust.requests[0].id, ipfsId)
                 this.setState({ added_file_hash: ipfsId })
             }).catch((err) => {
                 console.error(err)
@@ -146,6 +146,13 @@ class _TrustShow extends React.Component<any, any> {
                                         <Request>
                                             <h3>{request.title}</h3>
                                             <p>{request.description}</p>
+                                            {request.deliveryAttachments.map(r => (
+                                                <div>
+                                                    {r}
+                                                    <img src={`https://ipfs.io/ipfs/${r}`}/>
+                                                </div>
+                                            ))
+                                            }
                                         </Request>
                                     </Col>
                                     <Col xs={4}>
@@ -204,6 +211,8 @@ const TRUSTS_QUERY = gql`
           title
           description
           state
+          deliveryAttachments
+          deliveryDescription
         }
     }
     }

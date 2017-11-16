@@ -1,4 +1,4 @@
-const { makeExecutableSchema } = require('graphql-tools');
+import { makeExecutableSchema } from 'graphql-tools';
 import { resolvers } from "../resolvers";
 
 // Define types
@@ -17,6 +17,8 @@ const typeDefs = `
     title: String!
     description: String!
     state: String!
+    deliveryAttachments: [String]
+    deliveryDescription: String
   }
 
   type Query {
