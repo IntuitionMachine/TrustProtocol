@@ -1,4 +1,5 @@
 # TrustProtocol
+## Introduction
 The TrustProtocol defines and rewards trustworthy behavior, and penalizes
 and mitigates untrustworthy behavior. The TrustProtocol leverages real-world
 incentive systems, offering the ability to bring civil and criminal charges against
