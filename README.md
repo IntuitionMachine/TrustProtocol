@@ -53,7 +53,7 @@ SECRET_KEY: Secret key of the ethereum address to mint coins from
 PORT: Port for server to run on, i.e "8080"  
 
 ## /client
-The client helps users interact with the TrustProtocol contracts. Querying is done using the server, and mutations are done directly with web3 and TrustProtocolJS.
+The client helps users interact with the TrustProtocol contracts. Querying is completed using the server, and mutations are done directly with web3 and TrustProtocolJS.
 ```
 npm install
 REACT_APP_SERVER_URL="http://localhost:8080/graphql" npm run start
